@@ -77,3 +77,30 @@ class MapTraffic:
     arr[9][9] = 2
     back_map_modified = np.vectorize(get_color_coded_background)(arr)
     print_a_ndarray(back_map_modified, row_sep="")
+    
+ # tìm kiếm
+class SearchAlg:
+  def __init__(self, grid, start, energy): #khởi tạo giá trị
+    self.grid = grid
+    self.start = start
+    self.goal = (grid.n - 1, grid.m - 1)
+    self.energy = energy
+    self.lastEnergy = 0
+    self.came_from = {}
+
+  def trace_path(self): # lưu lại thông tin đường đi
+    node =  self.goal
+    energy = self.lastEnergy
+    path = []
+    while node != self.start:
+      path.append(node)
+      curr = self.came_from[(node, energy)]
+      node, energy = curr
+    
+    path.append(self.start)
+    path.reverse()
+    return path
+
+  # dự đoán chi phí đến đích
+  def heuristic(self,a1, a2, heu_type="Manhanttan"):
+      return abs(a1[0]-a2[0]) + abs(a1[1]-a2[1])
