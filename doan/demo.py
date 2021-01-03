@@ -185,3 +185,19 @@ class SearchAlg:
             stack.append((next_node, new_energy))
             self.came_from[(next_node, new_energy)] = (node, energy)
     return False
+
+# đọc từ tệp input 
+atlas = np.zeros((10, 10))
+wall = []
+material = []
+matrix=np.loadtxt("input.txt",dtype='i',delimiter=',')
+for i,j in enumerate(matrix):
+   for k,l in enumerate(j):
+     if l==3:
+         a = (i,k)
+         wall.append(a)
+     if l==4:
+         b = (i,k)
+         material.append(b)
+E = 5
+M = MapTraffic(atlas, wall, material)
