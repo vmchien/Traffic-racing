@@ -129,3 +129,33 @@ class SearchAlg:
             queue.append((next_node, new_energy))
             self.came_from[(next_node, new_energy)] = (node, energy)
     return False
+# thuật toán A*
+  def a_star(self):
+    open_list = PriorityQueue()
+    gScore = {(self.start, self.energy): 0}
+    fScore_start = self.heuristic(self.start, self.goal) # f = g + h = 0 + heu(start, goal)
+    open_list.push(fScore_start, (self.start, self.energy))
+    self.came_from = {} # dùng để lưu dấu đường đi
+
+    while not open_list.is_empty():
+        item = open_list.pop()
+        curr_fScore, curr = item
+        curr_node, curr_energy = curr
+        if curr_node == self.goal:
+            return True
+        if curr_energy > 0:
+          for next_node in self.grid.neighbors(curr_node):
+              if next_node in self.grid.material:
+                new_energy = self.energy
+              else:
+                new_energy = curr_energy - 1 # mỗi khi đi 1 bước, nguyên liệu sẽ giảm 1
+              new_g = gScore[(curr_node, curr_energy)] + 1
+              if ((next_node, new_energy) not in gScore) or (new_g < gScore[(next_node, new_energy)]): 
+                  gScore[(next_node, new_energy)] = new_g
+                  fScore_next_node = gScore[(next_node, new_energy)] + self.heuristic(next_node, self.goal)
+
+                  if next_node == self.goal:
+                    self.lastEnergy = new_energy
+                  open_list.push(fScore_next_node, (next_node, new_energy))
+                  self.came_from[(next_node, new_energy)] = (curr_node, curr_energy)    
+   return False
