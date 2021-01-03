@@ -159,3 +159,29 @@ class SearchAlg:
                   open_list.push(fScore_next_node, (next_node, new_energy))
                   self.came_from[(next_node, new_energy)] = (curr_node, curr_energy)    
    return False
+   
+  # thuật toán DFS
+  def DFS(self):
+    energy = self.energy
+    stack = []
+    stack.append((self.start, energy))
+    visited = []    
+    self.came_from = {}
+    while len(stack) > 0:
+      curr = stack.pop()      
+      node, energy = curr
+      visited.append(curr)
+      if energy > 0:
+        for next_node in self.grid.neighbors(node):
+          if next_node in self.grid.material:
+              new_energy = self.energy
+          else:
+              new_energy = energy - 1
+          if next_node == self.goal:
+            self.lastEnergy = new_energy
+            self.came_from[(self.goal, self.lastEnergy)] = (node, energy)
+            return True
+          elif (next_node, new_energy) not in visited:            
+            stack.append((next_node, new_energy))
+            self.came_from[(next_node, new_energy)] = (node, energy)
+    return False
