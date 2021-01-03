@@ -38,4 +38,20 @@ class MapTraffic:
     self.walls = walls
     self.material = material
 
- 
+  # kiểm tra có phải là tường
+  def passable(self, p):
+    for wall_pos in self.walls:
+      if wall_pos == p:
+        return False
+    return True
+  
+  # giá trị bước đi xung quanh
+  def neighbors(self, p):
+    x, y = p
+    neighbors = [(x+1,y),(x-1,y),(x,y+1),(x,y-1)]
+    valid_neighbors = []
+    for pos in neighbors:
+      if self.in_bounds(pos) and self.passable(pos):
+        valid_neighbors.append(pos)
+    return valid_neighbors
+   
