@@ -187,7 +187,6 @@ class SearchAlg:
                     self.came_from[(next_node, new_energy)] = (curr_node, curr_energy)
       return False
 
-=======
    
   # thuật toán DFS
   def DFS(self):
@@ -230,4 +229,40 @@ for i,j in enumerate(matrix):
          material.append(b)
 E = 5
 M = MapTraffic(atlas, wall, material)
+
+print ( "1: là điểm bắt đầu (màu xanh lá)")
+print ( "2: là điểm kết thúc (màu vàng)")
+print ( "3: là chướng ngại vật (màu xanh dương)")
+print ( "4: là trạm xăng (màu tím)")
+print ( "5: là đường đi qua (màu xanh nhạt)")
+print ( "7: là điểm đã đổ xăng (màu đen)")
+print("--------------------------Bản đồ---------------------------- ")
+M.show(show_weight=True)
+print("--------------------------------------------------------------")
+print("------ 1.DFS       2.BFS      3.UCS       4.A*   0.exit  ----")
+search = SearchAlg(M, (0,0), E)
+print("------------------------------------------------------------")
+
+while(True):
+  number=input('\nNhập thuật toán muốn chạy: ')
+  if number=="1":
+    print("DFS")
+    search.DFS()
+    M.show(show_weight=True, path=search.trace_path())
+  if number=="2":
+    print("BFS")
+    search.BFS()
+    M.show(show_weight=True, path=search.trace_path())
+  if number=="3":
+    print("UCS")
+    search.UCS()
+    M.show(show_weight=True, path=search.trace_path())
+  if number=="4":
+    print("A*")
+    search.a_star()
+    M.show(show_weight=True, path=search.trace_path())
+  if number=="0":
+    break
+
+
 >>>>>>> 43b574836b4962f4a807f6784d2bc78e2823af49
