@@ -38,6 +38,11 @@ class MapTraffic:
     self.walls = walls
     self.material = material
 
+  # kiểm tra bước có thể đi nằm trong phạm vi của bản đồ
+  def in_bounds(self, p):
+    x,y  = p
+    return x >=0 and y>=0 and x<self.n and y<self.m
+
   # kiểm tra có phải là tường
   def passable(self, p):
     for wall_pos in self.walls:
@@ -54,8 +59,8 @@ class MapTraffic:
       if self.in_bounds(pos) and self.passable(pos):
         valid_neighbors.append(pos)
     return valid_neighbors
-	
-   # hiển thị ra bản đồ
+  
+  # hiển thị ra bản đồ
   def show(self, show_weight=False, path=[]):
     arr = np.empty((0,10), int)
     for i in range(self.n):
@@ -77,8 +82,8 @@ class MapTraffic:
     arr[9][9] = 2
     back_map_modified = np.vectorize(get_color_coded_background)(arr)
     print_a_ndarray(back_map_modified, row_sep="")
-    
- # tìm kiếm
+
+# tìm kiếm
 class SearchAlg:
   def __init__(self, grid, start, energy): #khởi tạo giá trị
     self.grid = grid
@@ -104,6 +109,7 @@ class SearchAlg:
   # dự đoán chi phí đến đích
   def heuristic(self,a1, a2, heu_type="Manhanttan"):
       return abs(a1[0]-a2[0]) + abs(a1[1]-a2[1])
+
   # thuật toán BFS 
   def BFS(self):
     energy = self.energy
@@ -129,7 +135,8 @@ class SearchAlg:
             queue.append((next_node, new_energy))
             self.came_from[(next_node, new_energy)] = (node, energy)
     return False
-# thuật toán A*
+
+  # thuật toán A*
   def a_star(self):
     open_list = PriorityQueue()
     gScore = {(self.start, self.energy): 0}
@@ -158,8 +165,34 @@ class SearchAlg:
                     self.lastEnergy = new_energy
                   open_list.push(fScore_next_node, (next_node, new_energy))
                   self.came_from[(next_node, new_energy)] = (curr_node, curr_energy)    
-   return False
-<<<<<<< HEAD
+    return False
+
+# thuật toán DFS
+  def DFS(self):
+    energy = self.energy
+    stack = []
+    stack.append((self.start, energy))
+    visited = []    
+    self.came_from = {}
+    while len(stack) > 0:
+      curr = stack.pop()      
+      node, energy = curr
+      visited.append(curr)
+      if energy > 0:
+        for next_node in self.grid.neighbors(node):
+          if next_node in self.grid.material:
+              new_energy = self.energy
+          else:
+              new_energy = energy - 1
+          if next_node == self.goal:
+            self.lastEnergy = new_energy
+            self.came_from[(self.goal, self.lastEnergy)] = (node, energy)
+            return True
+          elif (next_node, new_energy) not in visited:            
+            stack.append((next_node, new_energy))
+            self.came_from[(next_node, new_energy)] = (node, energy)
+    return False
+
 # thuật toán UCS
   def UCS(self):
       open_list = PriorityQueue()
@@ -187,32 +220,6 @@ class SearchAlg:
                     self.came_from[(next_node, new_energy)] = (curr_node, curr_energy)
       return False
 
-   
-  # thuật toán DFS
-  def DFS(self):
-    energy = self.energy
-    stack = []
-    stack.append((self.start, energy))
-    visited = []    
-    self.came_from = {}
-    while len(stack) > 0:
-      curr = stack.pop()      
-      node, energy = curr
-      visited.append(curr)
-      if energy > 0:
-        for next_node in self.grid.neighbors(node):
-          if next_node in self.grid.material:
-              new_energy = self.energy
-          else:
-              new_energy = energy - 1
-          if next_node == self.goal:
-            self.lastEnergy = new_energy
-            self.came_from[(self.goal, self.lastEnergy)] = (node, energy)
-            return True
-          elif (next_node, new_energy) not in visited:            
-            stack.append((next_node, new_energy))
-            self.came_from[(next_node, new_energy)] = (node, energy)
-    return False
 
 # đọc từ tệp input 
 atlas = np.zeros((10, 10))
@@ -263,6 +270,4 @@ while(True):
     M.show(show_weight=True, path=search.trace_path())
   if number=="0":
     break
-
-
->>>>>>> 43b574836b4962f4a807f6784d2bc78e2823af49
+ # NGUỒN THAO KHẢO CHÍNH https://stackoverflow.com/
