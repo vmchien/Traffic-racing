@@ -104,3 +104,28 @@ class SearchAlg:
   # dự đoán chi phí đến đích
   def heuristic(self,a1, a2, heu_type="Manhanttan"):
       return abs(a1[0]-a2[0]) + abs(a1[1]-a2[1])
+  # thuật toán BFS 
+  def BFS(self):
+    energy = self.energy
+    queue = []
+    queue.append((self.start, energy))
+    visited = []    
+    self.came_from = {}
+    while len(queue) > 0:
+      curr = queue.pop(0)      
+      node, energy = curr
+      visited.append(curr)
+      if energy > 0:
+        for next_node in self.grid.neighbors(node):
+          if next_node in self.grid.material:
+              new_energy = self.energy
+          else:
+              new_energy = energy - 1
+          if next_node == self.goal:
+            self.lastEnergy = new_energy
+            self.came_from[(self.goal, self.lastEnergy)] = (node, energy)
+            return True
+          elif (next_node, new_energy) not in visited:            
+            queue.append((next_node, new_energy))
+            self.came_from[(next_node, new_energy)] = (node, energy)
+    return False
