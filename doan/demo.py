@@ -159,6 +159,7 @@ class SearchAlg:
                   open_list.push(fScore_next_node, (next_node, new_energy))
                   self.came_from[(next_node, new_energy)] = (curr_node, curr_energy)    
    return False
+<<<<<<< HEAD
 # thuật toán UCS
   def UCS(self):
       open_list = PriorityQueue()
@@ -186,3 +187,47 @@ class SearchAlg:
                     self.came_from[(next_node, new_energy)] = (curr_node, curr_energy)
       return False
 
+=======
+   
+  # thuật toán DFS
+  def DFS(self):
+    energy = self.energy
+    stack = []
+    stack.append((self.start, energy))
+    visited = []    
+    self.came_from = {}
+    while len(stack) > 0:
+      curr = stack.pop()      
+      node, energy = curr
+      visited.append(curr)
+      if energy > 0:
+        for next_node in self.grid.neighbors(node):
+          if next_node in self.grid.material:
+              new_energy = self.energy
+          else:
+              new_energy = energy - 1
+          if next_node == self.goal:
+            self.lastEnergy = new_energy
+            self.came_from[(self.goal, self.lastEnergy)] = (node, energy)
+            return True
+          elif (next_node, new_energy) not in visited:            
+            stack.append((next_node, new_energy))
+            self.came_from[(next_node, new_energy)] = (node, energy)
+    return False
+
+# đọc từ tệp input 
+atlas = np.zeros((10, 10))
+wall = []
+material = []
+matrix=np.loadtxt("input.txt",dtype='i',delimiter=',')
+for i,j in enumerate(matrix):
+   for k,l in enumerate(j):
+     if l==3:
+         a = (i,k)
+         wall.append(a)
+     if l==4:
+         b = (i,k)
+         material.append(b)
+E = 5
+M = MapTraffic(atlas, wall, material)
+>>>>>>> 43b574836b4962f4a807f6784d2bc78e2823af49
