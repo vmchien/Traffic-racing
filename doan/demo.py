@@ -185,3 +185,4 @@ class SearchAlg:
                     open_list.push(new_g, (next_node, new_energy))
                     self.came_from[(next_node, new_energy)] = (curr_node, curr_energy)
       return False
+
