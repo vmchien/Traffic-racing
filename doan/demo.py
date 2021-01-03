@@ -54,4 +54,26 @@ class MapTraffic:
       if self.in_bounds(pos) and self.passable(pos):
         valid_neighbors.append(pos)
     return valid_neighbors
-   
+	
+   # hiển thị ra bản đồ
+  def show(self, show_weight=False, path=[]):
+    arr = np.empty((0,10), int)
+    for i in range(self.n):
+      a = []
+      for j in range(self.m):
+        if (i,j) in path:
+          if (i,j) in self.material:
+                a.append(7)
+          else:
+                a.append(5)
+        elif (i, j) in self.material:
+              a.append(4)
+        elif self.passable((i,j)):
+             a.append(0)
+        else:
+            a.append(3)
+      arr = np.append(arr, np.array([a]), axis=0)
+    arr[0][0] = 1
+    arr[9][9] = 2
+    back_map_modified = np.vectorize(get_color_coded_background)(arr)
+    print_a_ndarray(back_map_modified, row_sep="")
