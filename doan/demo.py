@@ -234,7 +234,6 @@ for i,j in enumerate(matrix):
      if l==4:
          b = (i,k)
          material.append(b)
-E = 5
 M = MapTraffic(atlas, wall, material)
 
 print ( "1: là điểm bắt đầu (màu xanh lá)")
@@ -247,25 +246,32 @@ print("--------------------------Bản đồ---------------------------- ")
 M.show(show_weight=True)
 print("--------------------------------------------------------------")
 print("------ 1.DFS       2.BFS      3.UCS       4.A*   0.exit  ----")
-search = SearchAlg(M, (0,0), E)
 print("------------------------------------------------------------")
 
 while(True):
   number=input('\nNhập thuật toán muốn chạy: ')
   if number=="1":
     print("DFS")
+    E = int(input("\nNhập số lít xăng ban đầu:"))
+    search = SearchAlg(M, (0,0), E)
     search.DFS()
     M.show(show_weight=True, path=search.trace_path())
   if number=="2":
     print("BFS")
+    E = int(input("\nNhập số lít xăng ban đầu:"))
+    search = SearchAlg(M, (0,0), E)
     search.BFS()
     M.show(show_weight=True, path=search.trace_path())
   if number=="3":
     print("UCS")
+    E = int(input("\nNhập số lít xăng ban đầu:"))
+    search = SearchAlg(M, (0,0), E)
     search.UCS()
     M.show(show_weight=True, path=search.trace_path())
   if number=="4":
     print("A*")
+    E = int(input("\nNhập số lít xăng ban đầu:"))
+    search = SearchAlg(M, (0,0), E)
     search.a_star()
     M.show(show_weight=True, path=search.trace_path())
   if number=="0":
